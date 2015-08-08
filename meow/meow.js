@@ -77,7 +77,35 @@
               }
               return this;
 
-            }    
+            },
+            animateRight:function(speed){
+              var left = 0; 
+              var that = this
+              if(this.params[0]==='#'){
+                document.getElementById(this.params.slice(1)).style.position = 'relative';
+                setInterval(function(){
+                  left++
+                  document.getElementById(that.params.slice(1)).style.left = left+10+'px'
+                },speed)
+              }else if(this.params[0]==='.'){
+                document.getElementsByClassName(this.params.slice(1))[0].style.position = 'relative';
+                setInterval(function(){
+                  left++
+                  document.getElementsByClassName(that.params.slice(1))[0].style.left = left+10+'px'
+                },speed)
+
+              }else{
+                setInterval(function(){
+                  left++
+                  for(var i=0; i<document.getElementsByTagName(that.params).length; i++){
+                    document.getElementsByTagName(that.params)[i].style.position = 'relative';
+                    document.getElementsByTagName(that.params)[i].style.left = left+10+'px'
+                  }
+                },speed)
+              }
+              
+              return this;
+            }
          };
       
    
