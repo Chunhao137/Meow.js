@@ -66,6 +66,17 @@
             		document.getElementsByTagName(this.params)[0].style.backgroundColor=input
             	}
             	return this;
+            },
+            border:function(input){
+              if(this.params[0]==='#'){
+                document.getElementById(this.params.slice(1)).style.border=input
+              }else if(this.params[0]==='.'){
+                document.getElementsByClassName(this.params.slice(1))[0].style.border=input
+              }else{
+                document.getElementsByTagName(this.params)[0].style.border=input
+              }
+              return this;
+
             }    
          };
       
