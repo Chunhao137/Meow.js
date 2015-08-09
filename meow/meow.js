@@ -10,6 +10,7 @@
           this.selector = document.querySelectorAll(params);
           this.params = params;
            
+           
           // Return as object
           return this;        
       };
@@ -78,32 +79,44 @@
               return this;
 
             },
-            animateRight:function(speed){
-              var left = 0; 
-              var that = this
-              if(this.params[0]==='#'){
-                document.getElementById(this.params.slice(1)).style.position = 'relative';
-                setInterval(function(){
-                  left++
-                  document.getElementById(that.params.slice(1)).style.left = left+10+'px'
-                },speed)
-              }else if(this.params[0]==='.'){
-                document.getElementsByClassName(this.params.slice(1))[0].style.position = 'relative';
-                setInterval(function(){
-                  left++
-                  document.getElementsByClassName(that.params.slice(1))[0].style.left = left+10+'px'
-                },speed)
-
-              }else{
-                setInterval(function(){
-                  left++
-                  for(var i=0; i<document.getElementsByTagName(that.params).length; i++){
-                    document.getElementsByTagName(that.params)[i].style.position = 'relative';
-                    document.getElementsByTagName(that.params)[i].style.left = left+10+'px'
-                  }
-                },speed)
+            animate:function(direction,speed,stop){
+              var directionMapper = {
+                'right':'left',
+                'left':'left',
+                'down':'top',
+                'up':'top'
               }
-              
+
+              var counter = 0; 
+              var move = function(){
+                if(direction==='right' || direction==='down'){
+                  counter++
+                }else{
+                  counter--
+                }
+                if(this.params[0]==='#'){
+                  document.getElementById(this.params.slice(1)).style.position = 'relative';
+                  document.getElementById(this.params.slice(1)).style[directionMapper[direction]] = counter+'px'
+                  if(counter===stop){
+                    clearInterval(timeId)
+                  }
+                }else if(this.params[0]==='.'){
+                  document.getElementsByClassName(this.params.slice(1))[0].style.position = 'relative';
+                  document.getElementsByClassName(this.params.slice(1))[0].style[directionMapper[direction]] = counter+'px';
+                  if(counter===stop){
+                    clearInterval(timeId)
+                  }
+                }else{
+                  for(var i=0; i<document.getElementsByTagName(this.params).length; i++){
+                    document.getElementsByTagName(this.params)[i].style.position = 'relative';
+                    document.getElementsByTagName(this.params)[i].style[directionMapper[direction]] = counter+'px'
+                  }
+                  if(counter===stop){
+                    clearInterval(timeId)
+                  }
+                }
+              }
+              timeId = setInterval(move.bind(this),speed)
               return this;
             }
          };
