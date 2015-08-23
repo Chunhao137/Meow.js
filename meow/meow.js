@@ -9,8 +9,6 @@
           // Get params
           this.selector = document.querySelectorAll(params);
           this.params = params;
-           
-           
           // Return as object
           return this;        
       };
@@ -80,18 +78,28 @@
 
             },
             animate:function(direction,speed,stop){
+              //TODO: Need to figure out a way to chain several animations together
+              // var extend = function(obj){
+              //   var args = Array.prototype.slice.call(arguments,1);
+              //   args.forEach(function(object){
+              //     for(var key in object ){
+              //        obj[key]=object[key];
+              //     }
+              //   })
+              //   return obj;
+              // }
               var directionMapper = {
                 'right':'left',
                 'left':'left',
                 'down':'top',
                 'up':'top'
-              }
+              };
+              var counter = 0;
 
-              var counter = 0; 
               var move = function(){
                 if(direction==='right' || direction==='down'){
                   counter++
-                }else{
+                }else if(direction==='left' || direction==='up'){
                   counter--
                 }
                 if(this.params[0]==='#'){
@@ -117,10 +125,65 @@
                 }
               }
               timeId = setInterval(move.bind(this),speed)
-              return this;
+              return this
+            },
+            fadeOut:function(speed){
+              var counter=1; 
+              var fadeInCallback = function(){
+                counter=counter-0.1
+                if(this.params[0]==='#'){
+                  document.getElementById(this.params.slice(1)).style.opacity = Number(counter);
+                  if(counter<0){
+                    clearInterval(timeId)
+                  }
+                }else if(this.params[0]==='.'){
+                  document.getElementsByClassName(this.params.slice(1))[0].style.opacity = 'relative';
+                  if(counter<0){
+                    clearInterval(timeId)
+                  }
+                }else{
+                  for(var i=0; i<document.getElementsByTagName(this.params).length; i++){
+                    document.getElementsByTagName(this.params)[i].style.opacity = counter;
+                  }
+                  if(counter<0){
+                    clearInterval(timeId)
+                  }
+                }
+              }
+              timeId = setInterval(fadeInCallback.bind(this),speed)
+              return this
+          },
+          fadeIn:function(speed){
+            var counter=0; 
+            var fadeInCallback = function(){
+              counter=counter+0.1
+              if(this.params[0]==='#'){
+                document.getElementById(this.params.slice(1)).style.opacity = Number(counter);
+                if(counter>1){
+                  clearInterval(timeId)
+                }
+              }else if(this.params[0]==='.'){
+                document.getElementsByClassName(this.params.slice(1))[0].style.opacity = 'relative';
+                if(counter>1){
+                  clearInterval(timeId)
+                }
+              }else{
+                for(var i=0; i<document.getElementsByTagName(this.params).length; i++){
+                  document.getElementsByTagName(this.params)[i].style.opacity = counter;
+                }
+                if(counter>1){
+                  clearInterval(timeId)
+                }
+              }
             }
-         };
+            timeId = setInterval(fadeInCallback.bind(this),speed)
+            return this
+
+          }
+        }
       
+      //extend function:
+
    
       // Assign our M object to global window object.
       if(!window.M) {

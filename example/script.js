@@ -5,5 +5,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
     M('#myDiv').append('<h1>Meow Meow </h1>').bgColor('coral');
     //adds border 
     M('#myDiv').border("thick solid #0000FF");
-    
+
 });
